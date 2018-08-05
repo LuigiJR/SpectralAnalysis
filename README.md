@@ -1,2 +1,2 @@
-# SoectralAnalysis
+# SpectralAnalysis
 ygk
