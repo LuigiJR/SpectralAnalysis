@@ -11,7 +11,7 @@ library(rgdal)
 
 ## subroutines
 #FunctionSourceDir = '/Users/ljr/Workspace/RainfallSpectralAnalysis/SpectralAnalysisScripts/'
-FunctionSourceDir = '/g/data1a/fj4/users/renzullo/SpectralAnalysisScripts/'
+#FunctionSourceDir = '/g/data1a/fj4/users/renzullo/SpectralAnalysisScripts/'
 
 source(paste0(FunctionSourceDir,'function_ll2aea.R'))  ## converts lat longs in to AEA-Aus.
 source(paste0(FunctionSourceDir,'function_isopsd.R'))  ## ISO PSD calculation
