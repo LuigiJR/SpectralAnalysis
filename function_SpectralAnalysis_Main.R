@@ -11,7 +11,7 @@ library(rgdal)
 
 ## subroutines
 #FunctionSourceDir = '/Users/ljr/Workspace/RainfallSpectralAnalysis/SpectralAnalysisScripts/'
-#FunctionSourceDir = '/g/data1a/fj4/users/renzullo/SpectralAnalysisScripts/'
+FunctionSourceDir = '/g/data1a/fj4/users/renzullo/github/SpectralAnalysis/'
 
 source(paste0(FunctionSourceDir,'function_ll2aea.R'))  ## converts lat longs in to AEA-Aus.
 source(paste0(FunctionSourceDir,'function_isopsd.R'))  ## ISO PSD calculation
@@ -22,12 +22,15 @@ source(paste0(FunctionSourceDir,'function_SetupForGraphics.R'))   ##  functions 
 
 
 #  DEFINES A SQUARE AREA (in Eastings and Northings) ABOUT A GIVEN (lat,lon) POINT.
-DefineArea = function(lat, lon, L) {
+DefineArea = function(lat, lon, L, PROJ_IN,PROJ_OUT) {
    # - lat :   single value latitude of the site of interest  (degrees North)
    # - lon :   single value longitude of the site of interest (degrees East)
    # - L  :    length of the size of the square areas (extent of the square length of the (m) 
    #
-  
+
+	PROJ_SOURCE = PROJ_IN  
+	PROJ_TARGET = PROJ_OUT  
+
     cLL = SpatialPoints(cbind(lon,lat),proj4string=CRS(PROJ_SOURCE))
     cNE = spTransform(cLL,CRS(PROJ_TARGET))
     Easting_center  = as.vector(cNE@coords)[1]  # in meters (m)
