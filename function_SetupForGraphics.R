@@ -59,7 +59,7 @@ RainRamp=colorRampPalette(rgb(
 addCoastLines = function(PROJ_TARGET) {
 
 ## ---   if PROJ is lat-lon then plot the whole world coastline
-if (PROJ_TARGET != 'PROJ_LATLON') {
+if (length(grep('longlat',PROJ_LATLON)) != 1) {
 	CountriesToPlot = c('Australia','New Zealand','Japan','Indonesia','India',
         	            'Papua New Guinea','Thailand','China','Malaysia',
                 	    'Philippines','New Caledonia','Vietnam','Cambodia',
