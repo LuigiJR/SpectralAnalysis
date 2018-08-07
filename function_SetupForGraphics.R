@@ -57,13 +57,20 @@ RainRamp=colorRampPalette(rgb(
 
 # COAST LINES
 addCoastLines = function(PROJ_TARGET) {
-CountriesToPlot = c('Australia','New Zealand','Japan','Indonesia','India',
-                    'Papua New Guinea','Thailand','China','Malaysia',
-                    'Philippines','New Caledonia','Vietnam','Cambodia',
-                    'Laos','North Korea','South Korea','Taiwan','Myanmar',
-                    'Fiji','Solomon Islands','Vanuatu','Sri Lanka','Bangladesh')
-gobalLats = map('world',plot=F,region=CountriesToPlot)$y
-gobalLons = map('world',plot=F,region=CountriesToPlot)$x
+
+## ---   if PROJ is lat-lon then plot the whole world coastline
+if (PROJ_TARGET != 'PROJ_LATLON') {
+	CountriesToPlot = c('Australia','New Zealand','Japan','Indonesia','India',
+        	            'Papua New Guinea','Thailand','China','Malaysia',
+                	    'Philippines','New Caledonia','Vietnam','Cambodia',
+	                    'Laos','North Korea','South Korea','Taiwan','Myanmar',
+        	            'Fiji','Solomon Islands','Vanuatu','Sri Lanka','Bangladesh')
+	gobalLats = map('world',plot=F,region=CountriesToPlot)$y
+	gobalLons = map('world',plot=F,region=CountriesToPlot)$x
+} else {
+	gobalLats = map('world',plot=F)$y
+	gobalLons = map('world',plot=F)$x
+}
 
 ### -- getting rid of the lat and lons with NAs
 gLats = gobalLats[!is.na(gobalLats)]
