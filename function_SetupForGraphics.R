@@ -56,10 +56,10 @@ RainRamp=colorRampPalette(rgb(
 
 
 # COAST LINES
-addCoastLines = function(PROJ_TARGET) {
+addCoastLines = function(proj=PROJ_TARGET,Colour='darkgrey') {
 
 ## ---   if PROJ is lat-lon then plot the whole world coastline
-if (length(grep('longlat',PROJ_LATLON)) != 1) {
+if (length(grep('longlat',PROJ_TARGET)) != 1) {
 	CountriesToPlot = c('Australia','New Zealand','Japan','Indonesia','India',
         	            'Papua New Guinea','Thailand','China','Malaysia',
                 	    'Philippines','New Caledonia','Vietnam','Cambodia',
@@ -89,7 +89,7 @@ globalEastings[!is.na(gobalLons)]  = gE
 globalNorthings[!is.na(gobalLats)] = gN
 
 #
-lines(globalEastings,globalNorthings)
+lines(globalEastings,globalNorthings,col=Colour)
 
 }
 
