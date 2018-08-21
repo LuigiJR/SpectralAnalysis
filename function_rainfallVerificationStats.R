@@ -15,7 +15,7 @@ rainfallVerificationStats = function(R,G,zeroRth = 0.1) {
   c = length( which( E <  zero &  O >= zero ) ) #  MISSES
   d = length( which( E  < zero &  O <  zero ) ) #  CORRECT NEGATIVE
   
-  a_ref = (( a + b )*( a + c ))  /( a + b + c + d )
+  a_ref = (as.numeric( a + b )*as.numeric( a + c ))  /( a + b + c + d )
   
   POD = a / ( a + c )
   FAR = b / ( a + b )
