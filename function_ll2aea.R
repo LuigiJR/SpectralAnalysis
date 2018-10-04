@@ -1,5 +1,5 @@
 ### transform latitude and longitude points in to Albers Conic (equal area(projection   
-ll2aea = function( lat, lon ) {
+ll2aea = function( lat, lon, lat_0 = 0.00, lon_0 = 132.0 ) {
   ## ----- converts lat long coordinate into
   #        Albers Equal-Area Conical Proj. E and N
   #
@@ -14,16 +14,21 @@ ll2aea = function( lat, lon ) {
   #
   #                       -31.640625, 106.171875
   #                       -3730791.739059,-2594343.143593
+  #
+  # NOTE:   Added option to input reference latitude and longitude 
+  #         (lat_0 and lon_0). Default values 
+  #            lon_0  = 132.0  # reference logitude
+  #            lat_0  = 0.000  # reference latitude
+  # 
+  #         
   ####  GDA94
+  #
   #RsemiMajor  = 6378137.0
   a = 6378137.0
   #InverseFlattening = 298.257222101
   f = 1./ 298.257232666016 #1./298.257222101
   e = sqrt( 2. * f -  f * f )
 
-  #lon_0  = 134.0  # reference logitude
-  lon_0  = 132.0  # reference logitude
-  lat_0  = 0.000  # reference latitude
   lat_1  = -18.00 # two standard parallels
   lat_2  = -36.00
 
