@@ -56,10 +56,10 @@ RainRamp=colorRampPalette(rgb(
 
 
 # COAST LINES
-addCoastLines = function(proj=PROJ_TARGET,Colour='darkgrey') {
+addCoastLines = function(Proj=PROJ_TARGET,Colour='darkgrey') {
 
 ## ---   if PROJ is lat-lon then plot the whole world coastline
-if (length(grep('longlat',PROJ_TARGET)) != 1) {
+if (length(grep('longlat',Proj)) != 1) {
 	CountriesToPlot = c('Australia','New Zealand','Japan','Indonesia','India',
         	            'Papua New Guinea','Thailand','China','Malaysia',
                 	    'Philippines','New Caledonia','Vietnam','Cambodia',
@@ -77,7 +77,7 @@ gLats = gobalLats[!is.na(gobalLats)]
 gLons = gobalLons[!is.na(gobalLons)]
 
 gLL   = SpatialPoints(cbind(gLons,gLats),proj4string = CRS('+proj=longlat +datum=WGS84'))
-gNE   = spTransform(gLL,CRS(PROJ_TARGET))  # - change to the relavnt NEW projection e.g. PROJ_GEO, PROJ_AEA, ..
+gNE   = spTransform(gLL,CRS(Proj))  # - change to the relavnt NEW projection e.g. PROJ_GEO, PROJ_AEA, ..
 
 gE = coordinates(gNE)[,1]
 gN = coordinates(gNE)[,2]
