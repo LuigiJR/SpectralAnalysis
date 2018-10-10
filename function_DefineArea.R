@@ -1,5 +1,7 @@
 #  DEFINES A SQUARE AREA (in Eastings and Northings) ABOUT A GIVEN (lat,lon) POINT.
-DefineArea = function(lat, lon, L) {
+DefineArea = function(lat, lon, L,
+		      PROJ_TARGET='+proj=aea +lat_1=-18.0 +lat_2=-36.0 +lon_0=132 +lat_0=0 +datum=WGS84',
+		      PROJ_SOURCE='+proj=longlat +datum=WGS84') {
    # - lat :   single value latitude of the site of interest  (degrees North)
    # - lon :   single value longitude of the site of interest (degrees East)
    # - L  :    length of the size of the square areas (extent of the square length of the (m) 
