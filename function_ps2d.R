@@ -1,7 +1,7 @@
 
 # COMPUTES AND PLOTS THE FOURIER POWER SPECTRUM OF 2D ARRAY OF RAINFALL 
 
-ps2d = function(X,dx,Zmin=0,Zmax=100) {
+ps2d = function(X,dx,Zmin=0,Zmax=100,FTreturn=F) {
   # - X : is the image 2D array of NR rows and NC columns.  For now
   #     NR = NC but they needn't be equal.
   # - dx : increment in both eastings and northings in meters (m)
