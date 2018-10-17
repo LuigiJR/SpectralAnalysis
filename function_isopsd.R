@@ -47,8 +47,16 @@ isopsd = function(X,dx,Plotting=TRUE) {
     ISO_PS = c(ISO_PS,mean(PS_rr[in.bin],na.rm=T))
   }
   
+  
+  ## spectral slope cal.
+  # wl in meso-scale 20 - 100 km
+  wl = 1./wn
+  iin = which(wl< 100000 & wl> 20000)
+  lmreg = lm(log10(ISO_PS[iin]) ~ log10(wl[iin]))
+  BETA = as.numeric(coefficients(lmreg)[2])
+  
   if (!Plotting) {
-    return(list(Wavenummber = wn,PSD=ISO_PS))
+    return(list(Wavenumber = wn,PSD=ISO_PS, Beta = BETA))
   }  else {
 	  # -  x-axis plot extent is 0 - Nyquist critical frequency (m ** -1)
     dev.new();plot(log10(wn), 10*log10(ISO_PS),type='l',col='blue',lwd=3,xlab='log10(k)')  
