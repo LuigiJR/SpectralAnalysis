@@ -36,16 +36,16 @@ dft2d = function(X,inverse=FALSE) {
 		  #
 		  Y = fft2d_rr
 	} else { 
-                  ##### first fft (latitudinal direction)
+                  ##### first inv_fft (latitudinal direction)
                   for (i in 1:NR) {
                     xfft_rr[i,] = fft(X[i,], inverse = TRUE)  / NR
                   }
-                  ##   ' - - - - -  completed FT in x direction.'
-                  #####  second fft in longitudinal direction to generate the 2D DFT
+                  ##   ' - - - - -  completed inv_FT in x direction.'
+                  #####  second inv_fft in longitudinal direction to generate the 2D DFT
                   for (j in 1:NC) {
                     fft2d_rr[,j] = fft(xfft_rr[,j], inverse = TRUE) / NR
                   }
-                  ##   ' - - - - -  completed FT in y direction.'
+                  ##   ' - - - - -  completed inv_FT in y direction.'
                  #
 		 Y = Re(fft2d_rr)
 	}
