@@ -6,21 +6,22 @@ ScaleAndShift = function(R_orig,R_pert) {
 	NR = dim(R_orig)[1]
 	NC = NR
 
-	small_c = min(R_orig)
-	rain_thr = log10(0.1)
+	zero_eff = min(R_orig)
+	rain_thr = 10*log10(0.1)
 
 
-	WAR0 = sum(R_orig > rain_thr)/(NR*NC)  # wet area ratio
-        MM0  = mean(R_orig[R_orig> rain_thr]) # marginal mean and sd.
-        SD0  = sd(R_orig[R_orig > rain_thr])
+	WAR0 = sum(R_orig >= rain_thr)/(NR*NC)  # wet area ratio
+        MM0  = mean(R_orig[R_orig >= rain_thr]) # marginal mean and sd.
+        SD0  = sd(R_orig[R_orig >= rain_thr])
         TT0  = as.numeric(quantile(R_pert,probs=1 - WAR0))
     #  --
-        MMT = mean(R_pert[R_pert > TT0])
-        SDT = sd(R_pert[R_pert > TT0])
+        MMT = mean(R_pert[R_pert >= TT0])
+        SDT = sd(R_pert[R_pert >= TT0])
     #
         R_ens = (R_pert - MMT)/SDT * SD0 + MM0
         T_star = (TT0 - MMT)/SDT * SD0 + MM0
         R_ens[R_ens < T_star] = rain_thr
+#        R_ens[R_ens < T_star] = zero_eff
 
 	
    return(R_ens)
