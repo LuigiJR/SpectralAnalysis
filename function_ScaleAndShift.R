@@ -1,4 +1,4 @@
-###  Apply the Pegram scale-and-shift to preserve wet area
+##  Apply the Pegram scale-and-shift to preserve wet area
 ScaleAndShift = function(R_orig,R_pert) {
    #  -  R_orig  : original analysis
    #  -  R_pert  : perturbed analysis 
@@ -6,7 +6,7 @@ ScaleAndShift = function(R_orig,R_pert) {
 	NR = dim(R_orig)[1]
 	NC = NR
 
-	zero_eff = min(R_orig)
+	zero_eff = 10*log10(0.0001)
 	rain_thr = 10*log10(0.1)
 
 
