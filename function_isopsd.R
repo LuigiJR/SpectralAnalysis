@@ -1,11 +1,11 @@
 
 # COMPUTES AND PLOTS THE ISOTROPIC POWER SPECTRAL DENSITY
 
-isopsd = function(X,dx,Plotting=TRUE) {
+isopsd = function(X,dx,Plotting=FALSE) {
   # - X : is the image 2D array of NR rows and NC columns.  For now
   #     NR = NC but they needn't be equal.
   # - dx : increment in both eastings and northings in meters (m) 
-  # - Plotting : to plot or not. if not, wavenumber and iso psd returned
+  # - Plotting : to plot or not. if not, only wavenumber and iso psd returned
 
   NR = dim(X)[1]
   NC = NR
@@ -54,12 +54,12 @@ isopsd = function(X,dx,Plotting=TRUE) {
   lmreg = lm(log10(ISO_PS[iin]) ~ log10(wl[iin]))
   ALPHA = as.numeric(coefficients(lmreg)[1])
   BETA  = as.numeric(coefficients(lmreg)[2])
-  
-  if (!Plotting) {
-    return(list(Wavenumber = wn,PSD=ISO_PS, Alpha = ALPHA,Beta = BETA))
-  }  else {
-	  # -  x-axis plot extent is 0 - Nyquist critical frequency (m ** -1)
+
+  if (Plotting) {
+#	  # -  x-axis plot extent is 0 - Nyquist critical frequency (m ** -1)
     dev.new();plot(log10(wn), 10*log10(ISO_PS),type='l',col='blue',lwd=3,xlab='log10(k)')  
+  		YlineFit = 10*(ALPHA - BETA * log10(1./wl))
+		lines(log10(wn),YlineFit,col='blue',lty=3)
   } 
-  
+  return(list(Wavenumber = wn,PSD=ISO_PS, Alpha = ALPHA,Beta = BETA))  
 }
