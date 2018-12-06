@@ -53,7 +53,7 @@ RainRamp=colorRampPalette(rgb(
   green = RainfallColors_g / 255.,
   blue  = RainfallColors_b / 255.))
 
-
+DifferenceRamp = colorRampPalette(c('darkred','red','white','blue','navy'))
 
 # COAST LINES
 addCoastLines = function(Proj=PROJ_TARGET,Colour='darkgrey') {
