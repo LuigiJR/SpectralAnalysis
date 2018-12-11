@@ -20,10 +20,10 @@ logRain = function(R_in,inverse=FALSE,minRain = 0.1) {
    R_out = logR 
   } else {
     logMinRain = log(minRain)
-    isRain = logR > 0.e0 
+    isRain = logR > 0 
     isNoRain = !isRain
     R = exp(logR + logMinRain)
-    R[which(isNoRain)] = 0.e0
+    R[which(isNoRain)] = 0
     R[isNA] = NA
    R_out = R  
   }
