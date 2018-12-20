@@ -8,7 +8,7 @@ logRain = function(R_in,inverse=FALSE,minRain = 0.1) {
   # - minRain : the rain/no rain threshold, default = 0.1 mm hr**-1
   #
   
-  NR = dim(R)[1]; NC = NR
+  NR = dim(R_in)[1]; NC = NR
   isNA = which(is.na(R_in))
   logR = R_in
   if(!inverse) {
