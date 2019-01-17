@@ -8,7 +8,7 @@ isopsd = function(X,dx,Plotting=FALSE) {
   # - Plotting : to plot or not. if not, only wavenumber and iso psd returned
 
   NR = dim(X)[1]
-  NC = NR
+  NC = dim(X)[2] #NR
   
   # = = = =   Setting up for the Fourier analysis
   # - wavelength increment (m)
