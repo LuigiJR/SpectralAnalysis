@@ -1,23 +1,23 @@
 
 # COMPUTES AND PLOTS THE FOURIER POWER SPECTRUM OF 2D ARRAY OF RAINFALL 
 
-ps2d = function(X,dx,Zmin=0,Zmax=100,FTreturn=F) {
+ps2d = function(X,dx,FTreturn=F) {
   # - X : is the image 2D array of NR rows and NC columns.  For now
   #     NR = NC but they needn't be equal.
   # - dx : increment in both eastings and northings in meters (m)
-  # - Zmin / Zmax : minimum / maximum plottable value in 10*log10 units (default 100) 
   
 #  - plotting colour ramp
-  PowerRamp = colorRampPalette(c('white','navy','blue','cyan','green','yellow','orange','red','darkred'))
+  PowerRamp = colorRampPalette(c('navy','blue','cyan','green','yellow','orange','red','darkred'))
   NR = dim(X)[1]
-  NC = NR
+  NC = dim(X)[2] #NR
   
   # = = = =   Setting up for the Fourier analysis
   # - wavelength increment (m) 
   delta_x = dx # m
   
-  # - wavenumber ( m ** -1 ) 
-  wn = seq(0.0,by=1/(delta_x*NC),length.out=NC/2)
+  # - wavenumber ( m ** -1 )
+ 	NM = max(NR,NC) 
+  wn = seq(0.0,by=1/(delta_x*NM),length.out=NM/2)
   
   fft2d_rr = matrix(NA,NR,NC) # Rain data 2d Fourier transform
   xfft_rr  = matrix(NA,NR,NC) # temporary 2d array 
@@ -37,14 +37,12 @@ ps2d = function(X,dx,Zmin=0,Zmax=100,FTreturn=F) {
   PS_rr = Mod(fft2d_rr)**2
 
 	
-  PS_rst = raster(PS_rr[c((NR/2):1,1:(NR/2)),c((NR/2):1,1:(NR/2))],
+  PS_rst = raster(PS_rr[c((NR/2):1,NR:(NR/2+1)),c((NC/2):1,NC:(NC/2+1))],
 		  crs='+proj=longlat +datum=WGS84',
-		  xmn=-1/(2.*delta_x),xmx=1/(2.*delta_x),ymn=-1/(2.*delta_x),ymx=1/(2.*delta_x))
+		  xmn=-NC/(2.*(NC*delta_x)),xmx=NC/(2.*NC*delta_x),ymn=-NR/(2.*NR*delta_x),ymx=NR/(2.*NR*delta_x))
 		# -  plot extent  +/- Nyquist critical frequency 
 
-	PS_plot = 10*log10(PS_rst)
-  	PS_plot[PS_plot > Zmax] = Zmax
-  	PS_plot[PS_plot < Zmin] = Zmin
-    dev.new();plot(PS_plot, col=PowerRamp(64),zlim=c(Zmin,Zmax))
+	PS_plot = log(PS_rst)
+    dev.new();plot(PS_plot, col=PowerRamp(64))
 }
 
