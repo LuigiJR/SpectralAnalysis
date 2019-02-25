@@ -9,15 +9,11 @@ ps2d = function(X,dx,FTreturn=F) {
 #  - plotting colour ramp
   PowerRamp = colorRampPalette(c('navy','blue','cyan','green','yellow','orange','red','darkred'))
   NR = dim(X)[1]
-  NC = dim(X)[2] #NR
+  NC = dim(X)[2] 
   
   # = = = =   Setting up for the Fourier analysis
   # - wavelength increment (m) 
   delta_x = dx # m
-  
-  # - wavenumber ( m ** -1 )
- 	NM = max(NR,NC) 
-  wn = seq(0.0,by=1/(delta_x*NM),length.out=NM/2)
   
   fft2d_rr = matrix(NA,NR,NC) # Rain data 2d Fourier transform
   xfft_rr  = matrix(NA,NR,NC) # temporary 2d array 
@@ -35,9 +31,10 @@ ps2d = function(X,dx,FTreturn=F) {
   #
   ##### Power Spectrum
   PS_rr = Mod(fft2d_rr)**2
-
+        # -- following centers the PS (i.e. low freq in middle
+        PS_rr = PS_rr[c((NR/2):1,NR:(NR/2+1)),c((NC/2):1,NC:(NC/2+1))]
 	
-  PS_rst = raster(PS_rr[c((NR/2):1,NR:(NR/2+1)),c((NC/2):1,NC:(NC/2+1))],
+  PS_rst = raster(PS_rr,
 		  crs='+proj=longlat +datum=WGS84',
 		  xmn=-NC/(2.*(NC*delta_x)),xmx=NC/(2.*NC*delta_x),ymn=-NR/(2.*NR*delta_x),ymx=NR/(2.*NR*delta_x))
 		# -  plot extent  +/- Nyquist critical frequency 
