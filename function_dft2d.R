@@ -2,7 +2,7 @@
 # COMPUTES AND RETURNS THE FORWARD / INVERSE 2D DISCRETE FOURIER TRANSFORM
 #    OF A 2D ARRAY 
 
-dft2d = function(X,inverse=FALSE) {
+dft2d = function(X,inverse=FALSE,shift=FALSE) {
   # - X : is the image 2D array of NR rows and NC columns.  For now
   #     NR = NC but they needn't be equal. Note that in forward DFT
   #     X is a 2D array of reals (and function returns a 2D array of
@@ -11,10 +11,15 @@ dft2d = function(X,inverse=FALSE) {
   #
   #  - inverse : by default a forward DFT is return. if "inverse=T"
   #              the an inverse DFT is returned
-  #
+  # 
+  #  - shift  :  by default DFT is returned with no shifting, i.e.
+  #              high freq. at the center and low freq at the edges.
+  #              If TRUE, then shift is performed so that low freq.
+  #              at the centre . . .  to be consistent with 'ps2d'
+  #              plotting.
 
   NR = dim(X)[1]
-  NC = NR
+  NC = dim(X)[2]
   
   # = = = =   Setting up for the Fourier analysis
   
@@ -48,6 +53,9 @@ dft2d = function(X,inverse=FALSE) {
                   ##   ' - - - - -  completed inv_FT in y direction.'
                  #
 		 Y = Re(fft2d_rr)
+	}
+  	if (shift) {
+		Y = Y[c((NR/2):1,NR:(NR/2+1)),c((NC/2):1,NC:(NC/2+1))]
 	}
 	return(Y)
 }
