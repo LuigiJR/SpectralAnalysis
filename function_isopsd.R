@@ -15,12 +15,13 @@ isopsd = function(X,dx,Plotting=FALSE) {
   delta_x = dx # m
  
   # - wavenumber ( m ** -1 ) 
-  wn = seq(0.0,by=1/(delta_x*NC),length.out=NC/2)
-  
+
+  wn_x = seq((-NC/2+1)/(delta_x*NC),by=1/(delta_x*NC),length.out=NC)
+  wn_y = seq((-NR/2+1)/(delta_x*NR),by=1/(delta_x*NR),length.out=NR)
+	wn = abs(wn_x[(NC/2):1])  # -- for plotting x-axis of ISO PSD
   # -  matrix of wavenumbers (needed for the radial averaging.
-  A = matrix(NA,NC/2,NC/2)
-  for (i in 1:(NC/2)) {for (j in 1:(NC/2)){A[i,j] = sqrt(wn[i]**2 + wn[j]**2)}}
-  WAVENUMBERS = cbind(rbind(A,A[(NC/2):1,]),rbind(A[,(NC/2):1],A[(NC/2):1,(NC/2):1]))
+  WAVENUMBERS = matrix(NA,NR,NC)
+	for (j in 1:NC) {WAVENUMBERS[,j] = sqrt(wn_x[j]**2 + wn_y**2)}
 
   fft2d_rr = matrix(NA,NR,NC) # Rain data 2d Fourier transform
   xfft_rr  = matrix(NA,NR,NC) # temporary 2d array 
@@ -37,14 +38,17 @@ isopsd = function(X,dx,Plotting=FALSE) {
   ##print(  ' - - - - -  completed FT in y direction.')
   #
   ##### Power Spectrum
-  PS_rr = Mod(fft2d_rr) **2
+  PS_rr = Mod(fft2d_rr) **2   
+        # -- following centers the PS (i.e. low freq in middle
+	PS_rr = PS_rr[c((NR/2):1,NR:(NR/2+1)),c((NC/2):1,NC:(NC/2+1))]
 
   # - isotropic (radially averaged power spectral density)
   ISO_PS = c()
   for (ip in 1:length(wn)) {
-    bin.lim = wn[ip] + 1/(c(-2,2)*NC*delta_x)
-    in.bin  = which(WAVENUMBERS >= bin.lim[1] & WAVENUMBERS < bin.lim[2])
-    ISO_PS = c(ISO_PS,mean(PS_rr[in.bin],na.rm=T))
+	  bin.lim = wn[ip] + c(-1,1)*(1./(delta_x*NC))
+          in.bin  = which(WAVENUMBERS >= bin.lim[1] & WAVENUMBERS < bin.lim[2])
+
+	  ISO_PS = c(ISO_PS,mean(PS_rr[in.bin],na.rm=T))
   }
   
   ## spectral slope cal.
