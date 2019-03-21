@@ -1,7 +1,10 @@
 
 ####  functions with some graphics specificztions, including colour table and 
 ####    coastline
-
+library(ncdf4)
+suppressWarnings(library(raster))
+library(oz)
+suppressWarnings(library(rgdal))
 suppressWarnings(library(maps))
 
 # PLOTTING PARAMETERS  
@@ -93,3 +96,8 @@ lines(globalEastings,globalNorthings,col=Colour)
 
 }
 
+
+#### common projections used in displaying rainfall grids
+PROJ_LATLON = '+proj=longlat +datum=WGS84'
+PROJ_AEA = '+proj=aea +lat_1=-18.0 +lat_2=-36.0 +lon_0=132 +lat_0=0 +datum=WGS84'
+PROJ_GEO = '+proj=geos +lon_0=140.7 +h=35785863 +a=6378137.0 +b=6356752.3'
