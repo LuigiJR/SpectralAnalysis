@@ -11,7 +11,7 @@ gaussianWeights = function(nu_k, NC, dx, K=8, k) {
 
 	# -- functions:
 	log_a = function(x,a) {
-		res = -1.e+16 
+		res = -Inf 
 		res[x > 0] = log(x[x > 0])/log(a)
 		return(res)
 	}	
@@ -23,7 +23,7 @@ gaussianWeights = function(nu_k, NC, dx, K=8, k) {
 
 	a = (L / (2. * L0))**(1./(K-2))
 	b_k = 0.
-	if (k >= 1) {
+	if (k > 1) {
 		b_k = log_a(L0,a) + k - 2
 	} 
 #	c_k = 0.3 * a
@@ -33,7 +33,7 @@ gaussianWeights = function(nu_k, NC, dx, K=8, k) {
         c_k = 0.5
 
 	weights = exp(-(log_a(abs(l_k),a) - b_k)**2 / (2.*c_k**2))
-	if (k ==1) {weights[1] = 1.}
+	if (k ==1) {weights[nu_k==0] = 1.}
 
         return(weights)
 }

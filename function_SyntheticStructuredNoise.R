@@ -1,13 +1,13 @@
 
 # CREATES A MAP OF SYNTHETIC NOISE WITH STRUCTURE FOLLOWING POWER LAW 
 
-SyntheticStructuredNoise = function(NOISE,Beta) {
+SyntheticStructuredNoise = function(NOISE,Beta,dx=2000) {
   # - NOISE  :  2D array of Gaussian white noise
 	# dimensions NR, NC where
         # NR, NC  :  number of rows and columns over the areas of interets
   #              NOTE that these MUST be even numbers
-  # - Beta :  power law exponent 
-  #
+  # - Beta :  power law exponent
+  # - dx   :  spatial increment assumed to be 2000 m
   # Returns NR x NC 2D array of strctured noise
 
 	NR =dim(NOISE)[1]; NC = NR
@@ -15,17 +15,31 @@ SyntheticStructuredNoise = function(NOISE,Beta) {
   # = = = =   Setting up for the Fourier analysis
   # - wavenumber ( pixel ** -1 ) 
   
-	L  = NR
-  	xc = c(0:(L/2),(L/2-1):1)
+	L  = NR * dx
+  	xc = c(0:(NR/2),(NR/2-1):1)
 	yc = xc
 	gg = expand.grid(xc,yc)
 	
-	A = matrix(sqrt(gg$Var1*gg$Var1+gg$Var2*gg$Var2),L,L)
+	A = matrix(sqrt(gg$Var1*gg$Var1+gg$Var2*gg$Var2),NR,NC) 
+	WL =  L / A  ## spatial wavelength m
 
-  # - Power law filter
-  H_k = A ** (-Beta/2.)
+
+# - Power law filter
+	if (length(Beta) == 1) {
+ 		H_k = A ** (-Beta/2.)
+	} else {
+		if (length(Beta) > 3) {
+			print(' -- E R R O R: Currently only 3 Beta values permitted')
+		} else {  ####  assimes a breakpoint at 10 km mark
+			 H_k = A
+			 H_k[WL >= 125000] = A[WL >= 125000] ** (-Beta[3] / 2.)
+			 H_k[WL >= 17500]  = A[WL >= 17500] ** (-Beta[2] / 2.)
+			 H_k[WL <  17500]  = A[WL <  17500] ** (-Beta[1] / 2.)
+		}
+	}
   H_k[!is.finite(H_k)] = 1. 
-  
+  H_k[WL < 2*dx] = 0.e0  # Nyquist freq
+
   # - Gaussian white noise
   NOISE_MATRIX = NOISE 
 

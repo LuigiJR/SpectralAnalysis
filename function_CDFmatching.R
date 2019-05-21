@@ -20,23 +20,24 @@ CDFmatching = function(SOURCE,TARGET) {
     x_src = sort(as.vector(SOURCE[VALID]))
     y_tar = sort(as.vector(TARGET[VALID]))
 
-    x_unique = unique(x_src)
-    y_unique = approx(x=x_src,y=y_tar,xout = x_unique,rule=2)$y
+#    x_unique = unique(x_src)
+#    y_unique = approx(x=x_src,y=y_tar,xout = x_unique,rule=2)$y
 
-    y_src = approx(x=x_unique,y=y_unique,xout = as.vector(SOURCE),rule=2)$y
+#    y_src = approx(x=x_unique,y=y_unique,xout = as.vector(SOURCE),rule=2)$y
+    y_src = approx(x=x_src,y=y_tar,xout = as.vector(SOURCE),rule=2)$y
 
     ## to perform linear extrapolation for "xout" beyond x
     ##          Inspiration from https://rdrr.io/cran/Hmisc/src/R/Misc.s
     ##
-     x_src=x_unique
-     y_tar=y_unique
-     rng = range(x_src)
-     zz  = as.vector(SOURCE) > rng[2]
-     nz  = length(y_tar)
-
-    if (any(zz)) {y_src[zz] = (y_tar[nz] - y_tar[nz-1]) /
-                              (x_src[nz] - x_src[nz-1]) *
-                              (as.vector(SOURCE)[zz] - x_src[nz-1]) +
-                               y_tar[nz-1]}
+#     x_src=x_unique
+#     y_tar=y_unique
+#     rng = range(x_src)
+#     zz  = as.vector(SOURCE) > rng[2]
+#     nz  = length(y_tar)
+#
+#    if (any(zz)) {y_src[zz] = (y_tar[nz] - y_tar[nz-1]) /
+#                              (x_src[nz] - x_src[nz-1]) *
+#                              (as.vector(SOURCE)[zz] - x_src[nz-1]) +
+#                               y_tar[nz-1]}
    return(matrix(y_src,NR,NC))
 }

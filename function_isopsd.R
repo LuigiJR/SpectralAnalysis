@@ -52,18 +52,37 @@ isopsd = function(X,dx,Plotting=FALSE) {
   }
   
   ## spectral slope cal.
-  # wl in meso-scale 20 - 100 km
+  BETA = c(NA,NA,NA)
+  ALPHA = c(NA,NA,NA)
   wl = 1./wn
-  iin = which(wl< 100000 & wl> 20000)
-  lmreg = lm(log10(ISO_PS[iin]) ~ log10(wl[iin]))
-  ALPHA = as.numeric(coefficients(lmreg)[1])
-  BETA  = as.numeric(coefficients(lmreg)[2])
+  # wl in small-scale 4 - 17.5 km
+	iin = which(wl < 17500)
+  	lmreg = lm(log10(ISO_PS[iin]) ~ log10(wl[iin]))
+	 ALPHA[1] = as.numeric(coefficients(lmreg)[1])
+	 BETA[1]  = as.numeric(coefficients(lmreg)[2])
+# wl in meso-scale 17.5 - 125 km
+ 	iin = which(wl < 125000 & wl >= 17500)
+	 lmreg = lm(log10(ISO_PS[iin]) ~ log10(wl[iin]))
+	 ALPHA[2] = as.numeric(coefficients(lmreg)[1])
+	 BETA[2]  = as.numeric(coefficients(lmreg)[2])
+ # wl in large-scale 4 - 17.5 km
+        iin = which(wl >= 125000 & is.finite(wl))
+        lmreg = lm(log10(ISO_PS[iin]) ~ log10(wl[iin]))
+         ALPHA[3] = as.numeric(coefficients(lmreg)[1])
+         BETA[3]  = as.numeric(coefficients(lmreg)[2])
 
   if (Plotting) {
 #	  # -  x-axis plot extent is 0 - Nyquist critical frequency (m ** -1)
     dev.new();plot(log10(wn), 10*log10(ISO_PS),type='l',col='blue',lwd=3,xlab='log10(k)')  
-  		YlineFit = 10*(ALPHA - BETA * log10(1./wl))
-		lines(log10(wn),YlineFit,col='blue',lty=3)
+	if (!is.na(ALPHA[1]) & !is.na(BETA[1])) {
+		lines(log10(wn),10*(ALPHA[1] - BETA[1]*log10(1./wl)),col='blue',lty=3)
+	} 
+          if (!is.na(ALPHA[2]) & !is.na(BETA[2])) {
+                lines(log10(wn),10*(ALPHA[2] - BETA[2]*log10(1./wl)),col='blue',lty=3)
+        }
+        if (!is.na(ALPHA[3]) & !is.na(BETA[3])) {
+                lines(log10(wn),10*(ALPHA[3] - BETA[3]*log10(1./wl)),col='blue',lty=3)
+        }
   } 
   return(list(Wavenumber = wn,PSD=ISO_PS, Alpha = ALPHA,Beta = BETA))  
 }
