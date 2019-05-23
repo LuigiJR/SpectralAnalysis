@@ -25,6 +25,10 @@ get60min_acc_access_r = function(path2data,ValidDateTime) {
                 	RunTime = "1200"
 	                RunDate = format(validDateTime,'%Y%m%d/')
         	}
+               if (as.integer((HRS+2)/6)==4) {
+                        RunTime = "1800"
+                        RunDate = format(validDateTime,'%Y%m%d/')
+                }
                
                RunDir  = paste0(path2data,
                                  RunDate,
@@ -50,7 +54,7 @@ get60min_acc_access_r = function(path2data,ValidDateTime) {
 	} else {
 
 	xo = nc_open(file_r)
-		basetime = as.character(ncvar_get(xo,'base_time')[1])
+		basetime = sprintf('%04d',ncvar_get(xo,'base_time')[1]) 
 		basedate = as.character(ncvar_get(xo,'base_date')[1])
 
 		iso_basetime = ISOdatetime(substr(basedate,1,4),
@@ -66,11 +70,11 @@ get60min_acc_access_r = function(path2data,ValidDateTime) {
 	
 		x_1 = ncvar_get(xo,'accum_prcp',start=c(1,1,k_1),count=c(-1,-1,1))
 		x_2 = ncvar_get(xo,'accum_prcp',start=c(1,1,k_2),count=c(-1,-1,1))
-
-		x = t(x_1 - x_2)
-
-		rm(x_1,x_2)
 	nc_close(xo)
+
+	x = t(x_1 - x_2)
+
+	rm(x_1,x_2)
 
 	x_rst = raster(x,crs=proj,Lons_min,Lons_max,Lats_min,Lats_max)
 	return(x_rst)
