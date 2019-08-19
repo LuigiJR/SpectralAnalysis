@@ -75,7 +75,7 @@ cropRainfields = function(Lat,Long,L=512,RainfieldsRaster) {
 ##### 
   
 
-  dN = L/2
+  dN = L/2  # half the number of pixels in rows / columns
 
   proj  = '+proj=aea +lat_1=-18.0 +lat_2=-36.0 +lon_0=132 +lat_0=0 +datum=WGS84'
   nrows = 2050; ncols = 2450; dx = 2000 #dx in m
