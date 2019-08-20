@@ -19,8 +19,8 @@ filename_h8crr = function(path2data,validDateTime) {
         return(fname)
 }
 
-##   function to return the GPM equivalent of 60-minute accumulated 
-##    rainfall by adding two consectutive 30-min rain rates
+##   function to return the average rainfall rate over 30-minute period 
+##    by adding consectutive H8-CRR 10-min rain rates
 
 
 get30min_rainrate_h8crr = function(path2data,ValidDateTime){
