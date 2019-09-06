@@ -56,6 +56,10 @@ RainRamp=colorRampPalette(rgb(
   green = RainfallColors_g / 255.,
   blue  = RainfallColors_b / 255.))
 
+BOMRainRamp = colorRampPalette(rgb(red  = c(255,245,180,120,20,0,0,0,255,255,255,255,255,200,120,0)/255.,
+				   green= c(255,245,180,120,20,216,150,102,255,200,150,100,0,0,0,0)/255.,
+				   blue = c(255,255,255,255,255,195,144,102,0,0,0,0,0,0,0,0)/255.))
+
 DifferenceRamp = colorRampPalette(c('darkred','red','white','blue','navy'))
 
 # COAST LINES
