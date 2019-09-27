@@ -13,7 +13,13 @@ CDFmatching = function(SOURCE,TARGET) {
   #
   #  RETURNS - 2D array of CDF matched rainfall estimates
   #
-  
+    SOURCE_IS_RASTER = is.object(SOURCE)	
+    if (SOURCE_IS_RASTER) {
+	    rst_template = SOURCE
+	    SOURCE = as.matrix(SOURCE)
+    }
+    if (is.object(TARGET)) {TARGET  = as.matrix(TARGET) }	
+    
     NR = nrow(SOURCE); NC = ncol(SOURCE)
     VALID = which(!is.na(TARGET))  # which of the target data are NAN
    
@@ -39,5 +45,10 @@ CDFmatching = function(SOURCE,TARGET) {
 #                              (x_src[nz] - x_src[nz-1]) *
 #                              (as.vector(SOURCE)[zz] - x_src[nz-1]) +
 #                               y_tar[nz-1]}
-   return(matrix(y_src,NR,NC))
+   if (SOURCE_IS_RASTER) {
+	  OUTPUT = raster(matrix(y_src,NR,NC),template = rst_template) 
+   } else {
+	  OUTPUT = matrix(y_src,NR,NC)
+   }
+   return(OUTPUT)
 }
