@@ -7,7 +7,13 @@ logRain = function(R_in,inverse=FALSE,minRain = 0.1) {
   #                   if TRUE the exp(logRain) is computed.
   # - minRain : the rain/no rain threshold, default = 0.1 mm hr**-1
   #
-  
+
+	R_is_raster = is.object(R_in)
+	if (R_is_raster) {
+		r_template = R_in
+		R_in = as.matrix(R_in)
+	}
+
   NR = dim(R_in)[1]; NC = NR
   isNA = which(is.na(R_in))
   logR = R_in
@@ -27,5 +33,7 @@ logRain = function(R_in,inverse=FALSE,minRain = 0.1) {
     R[isNA] = NA
    R_out = R  
   }
+
+  if (R_is_raster) {R_out = raster(R_out,template=r_template)}
   return(R_out) 
 }  
