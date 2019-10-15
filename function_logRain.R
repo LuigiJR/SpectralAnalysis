@@ -1,8 +1,8 @@
 # COMPUTES LOG/EXP TRANSFORM OF RAINFALL/LOG RAINFALL
 
 logRain = function(R_in,inverse=FALSE,minRain = 0.1) {
-  # - R_in    : is the image 2D array of rainfall/logRainfall NR rows and NC columns.  
-  #     For now  NR = NC but they needn't be equal.
+  # - R_in    : is the image 2D array of rainfall/logRainfall, a raster 
+  #                  or vector.
   # - inverse : deafault FALSE meaning log of R is calculated; 
   #                   if TRUE the exp(logRain) is computed.
   # - minRain : the rain/no rain threshold, default = 0.1 mm hr**-1
@@ -14,7 +14,6 @@ logRain = function(R_in,inverse=FALSE,minRain = 0.1) {
 		R_in = as.matrix(R_in)
 	}
 
-  NR = dim(R_in)[1]; NC = NR
   isNA = which(is.na(R_in))
   logR = R_in
   if(!inverse) {
