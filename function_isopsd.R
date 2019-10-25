@@ -7,6 +7,10 @@ isopsd = function(X,dx,Plotting=FALSE) {
   # - dx : increment in both eastings and northings in meters (m) 
   # - Plotting : to plot or not. if not, only wavenumber and iso psd returned
 
+	IMAGE_IS_RASTER = is.object(X)
+	if (IMAGE_IS_RASTER) {
+		X = as.matrix(X)
+	}
   NR = dim(X)[1]
   NC = dim(X)[2] #NR
   
