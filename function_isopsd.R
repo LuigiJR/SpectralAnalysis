@@ -1,10 +1,10 @@
 
 # COMPUTES AND PLOTS THE ISOTROPIC POWER SPECTRAL DENSITY
 
-isopsd = function(X,dx,Plotting=FALSE) {
+isopsd = function(X,dx=2000,Plotting=FALSE) {
   # - X : is the image 2D array of NR rows and NC columns.  For now
   #     NR = NC but they needn't be equal.
-  # - dx : increment in both eastings and northings in meters (m) 
+  # - dx : increment in both eastings and northings in meters (m, default 2km) 
   # - Plotting : to plot or not. if not, only wavenumber and iso psd returned
 
 	IMAGE_IS_RASTER = is.object(X)
@@ -20,12 +20,13 @@ isopsd = function(X,dx,Plotting=FALSE) {
  
   # - wavenumber ( m ** -1 ) 
 
-  wn_x = seq((-NC/2+1)/(delta_x*NC),by=1/(delta_x*NC),length.out=NC)
-  wn_y = seq((-NR/2+1)/(delta_x*NR),by=1/(delta_x*NR),length.out=NR)
+  wn_x = seq(-NC/2+1,by=1,length.out=NC)
+  wn_y = seq(-NR/2+1,by=1,length.out=NR)
 	wn = abs(wn_x[(NC/2):1])  # -- for plotting x-axis of ISO PSD
   # -  matrix of wavenumbers (needed for the radial averaging.
   WAVENUMBERS = matrix(NA,NR,NC)
 	for (j in 1:NC) {WAVENUMBERS[,j] = sqrt(wn_x[j]**2 + wn_y**2)}
+	WAVENUMBERS = round(WAVENUMBERS,0)
 
   fft2d_rr = matrix(NA,NR,NC) # Rain data 2d Fourier transform
   xfft_rr  = matrix(NA,NR,NC) # temporary 2d array 
@@ -49,28 +50,27 @@ isopsd = function(X,dx,Plotting=FALSE) {
   # - isotropic (radially averaged power spectral density)
   ISO_PS = c()
   for (ip in 1:length(wn)) {
-	  bin.lim = wn[ip] + c(-1,1)*(1./(delta_x*NC))
-          in.bin  = which(WAVENUMBERS >= bin.lim[1] & WAVENUMBERS < bin.lim[2])
-
+          in.bin  = which(WAVENUMBERS == wn[ip]) 
 	  ISO_PS = c(ISO_PS,mean(PS_rr[in.bin],na.rm=T))
   }
   
   ## spectral slope cal.
   BETA = c(NA,NA,NA)
   ALPHA = c(NA,NA,NA)
-  wl = 1./wn
-  # wl in small-scale 4 - 17.5 km
-	iin = which(wl < 17500)
+  wl = (NC*delta_x) / wn
+  # wl in small-scale < 20 km
+	iin = which(wl < 20000)
   	lmreg = lm(log10(ISO_PS[iin]) ~ log10(wl[iin]))
 	 ALPHA[1] = as.numeric(coefficients(lmreg)[1])
 	 BETA[1]  = as.numeric(coefficients(lmreg)[2])
-# wl in meso-scale 17.5 - 125 km
- 	iin = which(wl < 125000 & wl >= 17500)
+# wl in meso-scale 20  - 130 km
+ 	iin = which(wl < 130000 & wl >= 20000)
+	iin_meso = iin 
 	 lmreg = lm(log10(ISO_PS[iin]) ~ log10(wl[iin]))
 	 ALPHA[2] = as.numeric(coefficients(lmreg)[1])
 	 BETA[2]  = as.numeric(coefficients(lmreg)[2])
- # wl in large-scale 4 - 17.5 km
-        iin = which(wl >= 125000 & is.finite(wl))
+ # wl in large-scale > 130 km
+        iin = which(wl >= 130000 & is.finite(wl))
         lmreg = lm(log10(ISO_PS[iin]) ~ log10(wl[iin]))
          ALPHA[3] = as.numeric(coefficients(lmreg)[1])
          BETA[3]  = as.numeric(coefficients(lmreg)[2])
@@ -83,6 +83,7 @@ isopsd = function(X,dx,Plotting=FALSE) {
 	} 
           if (!is.na(ALPHA[2]) & !is.na(BETA[2])) {
                 lines(log10(wn),10*(ALPHA[2] - BETA[2]*log10(1./wl)),col='blue',lty=3)
+		lines(log10(wn[iin_meso]), 10*log10(ISO_PS[iin_meso]),col='magenta',lwd=3)
         }
         if (!is.na(ALPHA[3]) & !is.na(BETA[3])) {
                 lines(log10(wn),10*(ALPHA[3] - BETA[3]*log10(1./wl)),col='blue',lty=3)
