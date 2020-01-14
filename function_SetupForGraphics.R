@@ -3,8 +3,7 @@
 ####    coastline
 library(ncdf4)
 suppressWarnings(library(raster))
-library(oz)
-suppressWarnings(library(rgdal))
+#suppressWarnings(library(rgdal))
 suppressWarnings(library(maps))
 
 # PLOTTING PARAMETERS  
@@ -71,7 +70,9 @@ if (length(grep('longlat',Proj)) != 1) {
         	            'Papua New Guinea','Thailand','China','Malaysia',
                 	    'Philippines','New Caledonia','Vietnam','Cambodia',
 	                    'Laos','North Korea','South Korea','Taiwan','Myanmar',
-        	            'Fiji','Solomon Islands','Vanuatu','Sri Lanka','Bangladesh')
+        	            'Fiji','Solomon Islands','Vanuatu','Sri Lanka','Bangladesh',
+			    'Afganistan','Pakistan','Iran','Turkmenistan','Uzbekistan',
+			    'Kazakstan','Oman')
 	gobalLats = map('world',plot=F,region=CountriesToPlot)$y
 	gobalLons = map('world',plot=F,region=CountriesToPlot)$x
 } else {
@@ -105,3 +106,5 @@ lines(globalEastings,globalNorthings,col=Colour)
 PROJ_LATLON = '+proj=longlat +datum=WGS84'
 PROJ_AEA = '+proj=aea +lat_1=-18.0 +lat_2=-36.0 +lon_0=132 +lat_0=0 +datum=WGS84'
 PROJ_GEO = '+proj=geos +lon_0=140.7 +h=35785863 +a=6378137.0 +b=6356752.3'
+PROJ_AEA_INDIA = '+proj=aea +lat_1=28 +lat_2=12 +lat_0=20 +lon_0=78 +x_0=2000000 +y_0=2000000 +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+PROJ_INSAT = '+proj=geos +lon_0=82.0 +h=36000000  +datum=WGS84'
