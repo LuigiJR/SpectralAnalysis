@@ -22,22 +22,29 @@ SyntheticStructuredNoise = function(NOISE,Beta,dx=2000) {
 	
 	A = matrix(sqrt(gg$Var1*gg$Var1+gg$Var2*gg$Var2),NR,NC) 
 	WL =  L / A  ## spatial wavelength m
-
+	WN = 1./WL
 
 # - Power law filter
 	if (length(Beta) == 1) {
- 		H_k = A ** (-Beta/2.)
+ 		H_k = WN ** (-Beta/2.)
 	} else {
 		if (length(Beta) > 3) {
 			print(' -- E R R O R: Currently only 3 Beta values permitted')
-		} else {  ####  assimes a breakpoint at 10 km mark
-			 H_k = A
-			 H_k[WL >= 125000] = A[WL >= 125000] ** (-Beta[3] / 2.)
-			 H_k[WL >= 17500]  = A[WL >= 17500] ** (-Beta[2] / 2.)
-			 H_k[WL <  17500]  = A[WL <  17500] ** (-Beta[1] / 2.)
+		} else {  ####  assumed breakpoints
+		         w_beta3 = which(WL>=125000)	
+			 w_beta2 = which(WL < 125000 & WL >= 17500)
+			 w_beta1 = which(WL <  17500)
+
+			 H_k = WN
+			 H_k[w_beta3] = WN[w_beta3] ** (-Beta[3] / 2.)
+			 H_k[w_beta2] = WN[w_beta2] ** (-Beta[2] / 2.)
+			 H_k[w_beta1] = WN[w_beta1] ** (-Beta[1] / 2.)
+
+			 H_k[w_beta3] = H_k[w_beta3] * (max(H_k[w_beta2]) / min(H_k[w_beta3]))
+			 H_k[w_beta1] = H_k[w_beta1] * (min(H_k[w_beta2]) / max(H_k[w_beta1]))
 		}
 	}
-  H_k[!is.finite(H_k)] = 1. 
+  H_k[!is.finite(H_k)] = max(H_k[is.finite(H_k)]) 
   H_k[WL < 2*dx] = 0.e0  # Nyquist freq
 
   # - Gaussian white noise
