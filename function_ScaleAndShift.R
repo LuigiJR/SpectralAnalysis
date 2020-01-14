@@ -20,7 +20,6 @@ ScaleAndShift = function(R_orig,R_pert) {
     #
         R_ens = (R_pert - MMT)/SDT * SD0 + MM0
         T_star = (TT0 - MMT)/SDT * SD0 + MM0
-#        R_ens[R_ens < T_star] = rain_thr
         R_ens[R_ens < T_star] = zero_eff
 
 	
