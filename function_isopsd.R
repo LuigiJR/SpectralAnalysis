@@ -82,12 +82,13 @@ isopsd = function(X,dx=2000,Plotting=FALSE) {
 		lines(log10(wn),10*(ALPHA[1] - BETA[1]*log10(1./wl)),col='blue',lty=3)
 	} 
           if (!is.na(ALPHA[2]) & !is.na(BETA[2])) {
-                lines(log10(wn),10*(ALPHA[2] - BETA[2]*log10(1./wl)),col='blue',lty=3)
+                lines(log10(wn),10*(ALPHA[2] - BETA[2]*log10(1./wl)),col='magenta',lty=3)
 		lines(log10(wn[iin_meso]), 10*log10(ISO_PS[iin_meso]),col='magenta',lwd=3)
+		points(log10(wn[iin_meso]), 10*log10(ISO_PS[iin_meso]),col='magenta')
         }
         if (!is.na(ALPHA[3]) & !is.na(BETA[3])) {
                 lines(log10(wn),10*(ALPHA[3] - BETA[3]*log10(1./wl)),col='blue',lty=3)
         }
   } 
-  return(list(Wavenumber = wn,PSD=ISO_PS, Alpha = ALPHA,Beta = BETA))  
+  return(list(Wavenumber = 1./wl,PSD=ISO_PS, Alpha = ALPHA,Beta = BETA))  
 }

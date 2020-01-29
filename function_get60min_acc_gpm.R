@@ -19,7 +19,7 @@ filename_gpm = function(path2data,validDateTime) {
         Etext = format(Etime,'E%H%M%S.')
         Interval = difftime(Stime,ISOdatetime(YYYY,MM,DD,0,0,0,tz='GMT'),units='secs') 
         IntervalText = sprintf('%04d.',Interval/60.)
-        leaf  = 'V05B.RT-H5'
+        leaf  = 'V06B.RT-H5'
 
         fname = paste0(path2data,YYYYMM,stem,yyyymmdd,Stext,Etext,IntervalText,leaf)
 
