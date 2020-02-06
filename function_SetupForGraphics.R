@@ -57,7 +57,7 @@ RainRamp=colorRampPalette(rgb(
 
 
 SoftRain_rgb = matrix(c(255,255,255,157,218,247,72,142,202,73,181,70,250,232,92,245,106,41,211,31,40,146,21,25),8,3,byrow=TRUE)
-SoftRainRamp = colorRampPalette(rgb(red=Spec_rgb[,1]/255.,green=Spec_rgb[,2]/255.,blue=Spec_rgb[,3]/255.))
+SoftRainRamp = colorRampPalette(rgb(red=SoftRain_rgb[,1]/255.,green=Spec_rgb[,2]/255.,blue=Spec_rgb[,3]/255.))
 
 
 BOMRainRamp = colorRampPalette(rgb(red  = c(255,245,180,120,20,0,0,0,255,255,255,255,255,200,120,0)/255.,
