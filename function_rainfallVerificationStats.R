@@ -6,10 +6,13 @@ rainfallVerificationStats = function(R,G,zeroRth = 0.1) {
   #  NOTE:  assumes all NA's are exclued from the analysis.
   
   zero = zeroRth
-
-  O = G   #   reference, obs
-  E = R   #   estimate
-  
+	if (is.object(R)) {
+		O = as.vector(as.matrix(G))
+		E = as.vector(as.matrix(R))
+	} else {
+		O = G   #   reference, obs
+		E = R   #   estimate
+  	}
   a = length( which( E >= zero &  O >= zero ) ) #  HITS
   b = length( which( E >= zero &  O <  zero ) ) #  FALSE ALARMS
   c = length( which( E <  zero &  O >= zero ) ) #  MISSES
