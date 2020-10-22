@@ -53,42 +53,54 @@ isopsd = function(X,dx=2000,Plotting=FALSE) {
           in.bin  = which(WAVENUMBERS == wn[ip]) 
 	  ISO_PS = c(ISO_PS,mean(PS_rr[in.bin],na.rm=T))
   }
-  
+
+  ## ISO PSD normalised to the center wavenumber:  falcialte comparison
+	y_iso = ISO_PS/ISO_PS[floor(NC/2)] 
+ 
   ## spectral slope cal.
-  BETA = c(NA,NA,NA)
-  ALPHA = c(NA,NA,NA)
+  BETA = c(NA,NA,NA); BETA_SD = c(NA,NA,NA)
+  ALPHA = c(NA,NA,NA); ALPHA_SD = c(NA,NA,NA)
   wl = (NC*delta_x) / wn
   # wl in small-scale < 20 km
 	iin = which(wl < 20000)
-  	lmreg = lm(log10(ISO_PS[iin]) ~ log10(wl[iin]))
+  	lmreg = lm(log10(y_iso[iin]) ~ log10(wl[iin]))
 	 ALPHA[1] = as.numeric(coefficients(lmreg)[1])
 	 BETA[1]  = as.numeric(coefficients(lmreg)[2])
+	 BETA_SD[1] = summary(lmreg)$coefficients[2,2]
+	 ALPHA_SD[1] = summary(lmreg)$coefficients[1,2]
+
 # wl in meso-scale 20  - 130 km
  	iin = which(wl < 130000 & wl >= 20000)
 	iin_meso = iin 
-	 lmreg = lm(log10(ISO_PS[iin]) ~ log10(wl[iin]))
+	 lmreg = lm(log10(y_iso[iin]) ~ log10(wl[iin]))
 	 ALPHA[2] = as.numeric(coefficients(lmreg)[1])
 	 BETA[2]  = as.numeric(coefficients(lmreg)[2])
+         BETA_SD[2]  = summary(lmreg)$coefficients[2,2]
+         ALPHA_SD[2] = summary(lmreg)$coefficients[1,2]
+	
  # wl in large-scale > 130 km
         iin = which(wl >= 130000 & is.finite(wl))
-        lmreg = lm(log10(ISO_PS[iin]) ~ log10(wl[iin]))
+        lmreg = lm(log10(y_iso[iin]) ~ log10(wl[iin]))
          ALPHA[3] = as.numeric(coefficients(lmreg)[1])
          BETA[3]  = as.numeric(coefficients(lmreg)[2])
+         BETA_SD[3]  = summary(lmreg)$coefficients[2,2]
+         ALPHA_SD[3] = summary(lmreg)$coefficients[1,2]
 
   if (Plotting) {
 #	  # -  x-axis plot extent is 0 - Nyquist critical frequency (m ** -1)
-    dev.new();plot(log10(wn), 10*log10(ISO_PS),type='l',col='blue',lwd=3,xlab='log10(k)')  
+	  # -  y-axis 10log10(ISOPSD) --> normalised to power at center wavenumber
+    dev.new();plot(log10(1./wl), 10*log10(y_iso),type='l',col='blue',lwd=3,xlab='log10(k)',ylab='10*log10(ISO PSD)')  
 	if (!is.na(ALPHA[1]) & !is.na(BETA[1])) {
-		lines(log10(wn),10*(ALPHA[1] - BETA[1]*log10(1./wl)),col='blue',lty=3)
+		lines(log10(1./wl),10*(ALPHA[1] - BETA[1]*log10(1./wl)),col='blue',lty=3)
 	} 
           if (!is.na(ALPHA[2]) & !is.na(BETA[2])) {
-                lines(log10(wn),10*(ALPHA[2] - BETA[2]*log10(1./wl)),col='magenta',lty=3)
-		lines(log10(wn[iin_meso]), 10*log10(ISO_PS[iin_meso]),col='magenta',lwd=3)
-		points(log10(wn[iin_meso]), 10*log10(ISO_PS[iin_meso]),col='magenta')
+                lines(log10(1./wl),10*(ALPHA[2] - BETA[2]*log10(1./wl)),col='magenta',lty=3)
+		lines(log10(1./wl[iin_meso]), 10*log10(y_iso[iin_meso]),col='magenta',lwd=3)
+		points(log10(1./wl[iin_meso]),10*log10(y_iso[iin_meso]),col='magenta')
         }
         if (!is.na(ALPHA[3]) & !is.na(BETA[3])) {
-                lines(log10(wn),10*(ALPHA[3] - BETA[3]*log10(1./wl)),col='blue',lty=3)
+                lines(log10(1./wl),10*(ALPHA[3] - BETA[3]*log10(1./wl)),col='blue',lty=3)
         }
   } 
-  return(list(Wavenumber = 1./wl,PSD=ISO_PS, Alpha = ALPHA,Beta = BETA))  
+  return(list(Wavenumber = 1./wl,PSD=y_iso, Alpha = ALPHA,Beta = BETA, Beta_StErr = BETA_SD))  
 }
