@@ -24,7 +24,8 @@ CDFmatching = function(SOURCE,TARGET) {
                 NR = nrow(SOURCE); NC = ncol(SOURCE)
         }
 
-        VALID = which(!is.na(TARGET))  # which of the target data are NAN
+        VALID = which(!is.na(TARGET) & !is.na(SOURCE))  
+	# which of the target AND source data are NAN
 
     x_src = sort(as.vector(SOURCE[VALID]))
     y_tar = sort(as.vector(TARGET[VALID]))
