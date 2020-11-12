@@ -77,6 +77,8 @@ BOMRainRamp = colorRampPalette(rgb(red  = c(255,245,180,120,20,0,0,0,255,255,255
 
 DifferenceRamp = colorRampPalette(c('darkred','red','white','blue','navy'))
 
+SMcolours = colorRampPalette(c('white',"peru","orange","yellow","forestgreen",'deepskyblue','navy','black'))
+
 # COAST LINES
 addCoastLines = function(Proj=PROJ_TARGET,Colour='darkgrey') {
 
