@@ -125,4 +125,27 @@ PROJ_LATLON = '+proj=longlat +datum=WGS84'
 PROJ_AEA = '+proj=aea +lat_1=-18.0 +lat_2=-36.0 +lon_0=132 +lat_0=0 +datum=WGS84'
 PROJ_GEO = '+proj=geos +lon_0=140.7 +h=35785863 +a=6378137.0 +b=6356752.3'
 PROJ_AEA_INDIA = '+proj=aea +lat_1=28 +lat_2=12 +lat_0=20 +lon_0=78 +x_0=2000000 +y_0=2000000 +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
-PROJ_INSAT = '+proj=geos +lon_0=82.0 +h=36000000  +datum=WGS84'
+PROJ_INSAT3D  = '+proj=geos +lon_0=82.0 +h=36000000  +datum=WGS84'
+PROJ_INSAT3DR = '+proj=geos +lon_0=74.0 +h=36000000  +datum=WGS84'
+
+### add Indian political border
+addIndianBorder = function(Proj=PROJ_TARGET,Colour='darkgrey') {
+#
+		x_raw = read.csv('~/Workspace/RainfallSpectralAnalysis/SpectralAnalysis/India_border_lat_lon.csv')
+		indian_lats = x_raw[,1]
+		indian_lons = x_raw[,2]
+		indian_east = indian_lons # initialise array to track NA's
+		indian_nrth = indian_lats
+
+			x_raw = cbind(indian_lons[!is.na(indian_lons)],indian_lats[!is.na(indian_lats)])
+		x_sp = SpatialPoints(x_raw,proj4string=CRS(PROJ_LATLON))
+		x_sp_tr = spTransform(x_sp,CRSobj=Proj)
+		gE = coordinates(x_sp_tr)[,1]
+		gN = coordinates(x_sp_tr)[,2]
+
+                indian_east[!is.na(indian_lons)]  = gE
+                indian_nrth[!is.na(indian_lats)]  = gN
+
+##
+lines(indian_east,indian_nrth,col=Colour)
+}
