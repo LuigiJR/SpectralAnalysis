@@ -137,7 +137,7 @@ addIndianBorder = function(Proj=PROJ_TARGET,Colour='darkgrey') {
 		indian_east = indian_lons # initialise array to track NA's
 		indian_nrth = indian_lats
 
-			x_raw = cbind(indian_lons[!is.na(indian_lons)],indian_lats[!is.na(indian_lats)])
+		x_raw = cbind(indian_lons[!is.na(indian_lons)],indian_lats[!is.na(indian_lats)])
 		x_sp = SpatialPoints(x_raw,proj4string=CRS(PROJ_LATLON))
 		x_sp_tr = spTransform(x_sp,CRSobj=Proj)
 		gE = coordinates(x_sp_tr)[,1]
@@ -145,7 +145,6 @@ addIndianBorder = function(Proj=PROJ_TARGET,Colour='darkgrey') {
 
                 indian_east[!is.na(indian_lons)]  = gE
                 indian_nrth[!is.na(indian_lats)]  = gN
-
 ##
 lines(indian_east,indian_nrth,col=Colour)
 }
