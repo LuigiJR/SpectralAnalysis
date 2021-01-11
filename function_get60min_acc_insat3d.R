@@ -55,7 +55,7 @@ get60min_acc_insat3d = function(path2data,ValidDateTime){
                         nc_close(xo)
 
 			x_mat = t(matrix(cbind(as.vector(x_1),as.vector(x_2))))
-			x = matrix(colMeans(x_mat),dim(x_1)[1],dim(x_1)[2]); rm(x_mat)
+			x = matrix(colMeans(x_mat,na.rm=TRUE),dim(x_1)[1],dim(x_1)[2]); rm(x_mat)
 
 			rm(x_1,x_2)
 		} else {
