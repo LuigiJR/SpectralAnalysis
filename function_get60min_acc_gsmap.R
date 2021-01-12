@@ -30,7 +30,7 @@ filename_gsmap = function(path2data,validDateTime) {
 get60min_acc_gsmap = function(path2data,ValidDateTime){
 
    proj = '+proj=longlat +datum=WGS84'
-   Lons_min = -180.;Lons_max=180.
+   Lons_min = 0.;Lons_max=360.
    Lats_min=-60.;   Lats_max=60.
 
 	vdatetime1 = ValidDateTime
