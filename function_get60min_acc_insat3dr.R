@@ -28,7 +28,7 @@ get60min_acc_insat3dr = function(path2data,ValidDateTime){
         vROWS = 58:2760
         vCOLS = 48:2758
 	proj = '+proj=geos +lon_0=74.0 +h=36000000  +datum=WGS84'
-        Emn = -5438829, Emx = 5438829, Nmn = -5420807, Nmx = 5420807 
+        Emn = -5438829; Emx = 5438829; Nmn = -5420807; Nmx = 5420807 
 
 	vdatetime1 = ValidDateTime - 45 * 60  # 45 min previous
 	vdatetime2 = ValidDateTime - 15 * 60  # 15 min previous
