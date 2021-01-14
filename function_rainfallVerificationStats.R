@@ -28,7 +28,7 @@ rainfallVerificationStats = function(R,G,zeroRth = 0.1) {
   RMSE = sqrt(mean(D_AC^2,na.rm=T))
   MAD  = mean(abs(D_AC),na.rm=T)
   BIAS = mean(D_AC,na.rm=T)
-  COR  = cor(E,O)
+  COR  = cor(E,O,use="p")
   
   return(list=c(RMSE=RMSE, MAD=MAD,Bias=BIAS, Corr = COR,POD = POD, FAR=FAR, ETS = ETS))
 }
