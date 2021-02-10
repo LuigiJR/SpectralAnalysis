@@ -66,6 +66,7 @@ RainRamp=colorRampPalette(rgb(
   green = RainfallColors_g / 255.,
   blue  = RainfallColors_b / 255.))
 
+Thermal = colorRampPalette(c('white','blue','green','yellow','red'))
 
 SoftRain_rgb = matrix(c(255,255,255,157,218,247,72,142,202,73,181,70,250,232,92,245,106,41,211,31,40,146,21,25),8,3,byrow=TRUE)
 SoftRainRamp = colorRampPalette(rgb(red=SoftRain_rgb[,1]/255.,green=SoftRain_rgb[,2]/255.,blue=SoftRain_rgb[,3]/255.))
