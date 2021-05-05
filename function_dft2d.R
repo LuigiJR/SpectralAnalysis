@@ -18,6 +18,13 @@ dft2d = function(X,inverse=FALSE,shift=FALSE) {
   #              at the centre . . .  to be consistent with 'ps2d'
   #              plotting.
 
+
+  # if X is a raster object, then extact as.matrix
+	x_is_object = is.object(X)
+  if (x_is_object){
+	  r_template = X
+	  X = as.matrix(X)
+  }
   NR = dim(X)[1]
   NC = dim(X)[2]
   
@@ -57,6 +64,10 @@ dft2d = function(X,inverse=FALSE,shift=FALSE) {
   	if (shift) {
 		Y = Y[c((NR/2):1,NR:(NR/2+1)),c((NC/2):1,NC:(NC/2+1))]
 	}
-	return(Y)
+	Y_out = Y
+	if (x_is_object) {
+		Y_out = raster(Y_out,template=r_template)
+	}
+	return(Y_out)
 }
 
