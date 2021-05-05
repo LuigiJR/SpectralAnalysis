@@ -65,9 +65,6 @@ dft2d = function(X,inverse=FALSE,shift=FALSE) {
 		Y = Y[c((NR/2):1,NR:(NR/2+1)),c((NC/2):1,NC:(NC/2+1))]
 	}
 	Y_out = Y
-	if (x_is_object) {
-		Y_out = raster(Y_out,template=r_template)
-	}
 	return(Y_out)
 }
 
