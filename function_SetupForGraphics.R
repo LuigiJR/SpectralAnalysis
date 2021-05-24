@@ -15,8 +15,12 @@ getCellfromLocation = function(Lat,Long,Raster) {
 		en = spTransform(ll,CRS(projinfo))
 	return(cellFromXY(Raster,en))
 }
-#####
 
+##### function to return the standarised version of a matrix, vector or raster
+standardise = function(X) {
+ return((X - mean(X,na.rm=TRUE))/sd(X,na.rm=TRUE))}
+
+#####
 # PLOTTING PARAMETERS  
 RainfallColors_r = c(255, 252, 250, 247, 244, 242, 239, 236, 234, 231, 229, 226, 223, 221, 218, 215, 213, 210,
                      207, 205, 202, 199, 197, 194, 191, 189, 186, 183, 181, 178, 176, 173, 170, 168, 165, 162,
