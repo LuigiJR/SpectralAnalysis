@@ -2,9 +2,9 @@
 ####  functions with some graphics specificztions, including colour table and 
 ####    coastline
 library(ncdf4)
-suppressWarnings(library(raster))
+suppressMessages(library(raster))
 #suppressWarnings(library(rgdal))
-suppressWarnings(library(maps))
+suppressMessages(library(maps))
 
 ##### function to identify cellPosition from lat/long
 getCellfromLocation = function(Lat,Long,Raster) {
