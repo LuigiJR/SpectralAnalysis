@@ -24,33 +24,39 @@ CDFmatching = function(SOURCE,TARGET) {
                 NR = nrow(SOURCE); NC = ncol(SOURCE)
         }
 
+    if (all(is.na(TARGET))) {
+	    # if the TARGET data is all NA's then only return the orginal SOURCE
+	    y_src = SOURCE
+    } else {
+    
+
         VALID = which(!is.na(TARGET) & !is.na(SOURCE))  
 	# which of the target AND source data are NAN
 
-    x_src = sort(as.vector(SOURCE[VALID]))
-    y_tar = sort(as.vector(TARGET[VALID]))
+	    x_src = sort(as.vector(SOURCE[VALID]))
+	    y_tar = sort(as.vector(TARGET[VALID]))
     
-    ## only do the transformation if there is more that 1% of the data in the SOURCE
+	    ## only do the transformation if there is more that 1% of the data in the SOURCE
     
-    if (sum(x_src > 0)/length(x_src) > 0.01) {
-      y_src = approx(x=x_src,y=y_tar,xout = as.vector(SOURCE),rule=2)$y
+	    if (sum(x_src > 0)/length(x_src) > 0.01) {
+	      y_src = approx(x=x_src,y=y_tar,xout = as.vector(SOURCE),rule=2)$y
       
-      ## to perform linear extrapolation for "xout" beyond x
-      ##          Inspiration from https://rdrr.io/cran/Hmisc/src/R/Misc.s
-      ##
-      rng = range(x_src)
-      zz  = as.vector(SOURCE) > rng[2]
-      nz  = length(y_tar)
+	      ## to perform linear extrapolation for "xout" beyond x
+	      ##          Inspiration from https://rdrr.io/cran/Hmisc/src/R/Misc.s
+	      ##
+	      rng = range(x_src)
+	      zz  = as.vector(SOURCE) > rng[2]
+	      nz  = length(y_tar)
       
-      if (any(zz,na.rm=TRUE)) {y_src[zz] = (y_tar[nz] - y_tar[nz-1]) /
-        (x_src[nz] - x_src[nz-1]) *
-        (as.vector(SOURCE)[zz] - x_src[nz-1]) +
-        y_tar[nz-1]}
+	      if (any(zz,na.rm=TRUE)) {y_src[zz] = (y_tar[nz] - y_tar[nz-1]) /
+	        (x_src[nz] - x_src[nz-1]) *
+	        (as.vector(SOURCE)[zz] - x_src[nz-1]) +
+	        y_tar[nz-1]}
       
-    } else {
-      y_src = as.vector(SOURCE)
-    }
-
+	      } else {
+	      y_src = as.vector(SOURCE)
+    	      }
+   }
    if (SOURCE_IS_RASTER) {
           OUTPUT = raster(matrix(y_src,NR,NC),template = rst_template)
    } else {
